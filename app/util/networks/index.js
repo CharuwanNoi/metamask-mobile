@@ -21,6 +21,22 @@ const NetworkList = {
 		hexChainId: '0x1',
 		color: '#3cc29e',
 		networkType: 'mainnet'
+
+		// name: 'Binance Main Network',
+		// shortName: 'Binance',
+		// networkId: 1,
+		// chainId: 56,
+		// hexChainId: '0x38',
+		// color: '#3cc29e',
+		// networkType: 'mainnet'
+
+		// name: 'Bitkub Chain',
+		// shortName: 'Binance',
+		// networkId: 96,
+		// chainId: 96,
+		// hexChainId: '0x38',
+		// color: '#3cc29e',
+		// networkType: 'mainnet'
 	},
 	[ROPSTEN]: {
 		name: 'Ropsten Test Network',
@@ -58,6 +74,15 @@ const NetworkList = {
 		color: '#3099f2',
 		networkType: 'goerly'
 	},
+	// [BINANCE]: {
+	// 	name: 'Binance Test Network',
+	// 	shortName: 'Binance',
+	// 	networkId: 97,
+	// 	chainId: 97,
+	// 	hexChainId: '0x61',
+	// 	color: '#DAD748A4',
+	// 	networkType: 'binance'
+	// },
 	[RPC]: {
 		name: 'Private Network',
 		shortName: 'Private',

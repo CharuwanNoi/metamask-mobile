@@ -156,9 +156,9 @@ class NetworksSettings extends PureComponent {
 
 	renderRpcNetworks = () => {
 		const { frequentRpcList } = this.props;
+		console.log('frequentRpcList ---> ', frequentRpcList);
 		return frequentRpcList.map(({ rpcUrl, nickname }, i) => {
 			const { color, name } = { name: nickname || rpcUrl, color: null };
-
 			return this.networkElement(name, color, i, rpcUrl, true);
 		});
 	};

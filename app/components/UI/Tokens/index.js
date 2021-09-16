@@ -166,6 +166,14 @@ class Tokens extends PureComponent {
 		</View>
 	);
 
+	// {
+	// 	"address": "0xf10362302f2a43e2cDCE835DB8501860FCaA69b6",
+	// 	"symbol": "IDOL",
+	// 	"decimals": "18",
+	// 	"isERC721": false,
+	// 	"balanceError": null
+	// }
+
 	renderItem = asset => {
 		const { conversionRate, currentCurrency, tokenBalances, tokenExchangeRates, primaryCurrency } = this.props;
 		const itemAddress = safeToChecksumAddress(asset.address);
@@ -179,6 +187,8 @@ class Tokens extends PureComponent {
 
 		// render balances according to primary currency
 		let mainBalance, secondaryBalance;
+		console.log('primaryCurrency --> ', primaryCurrency);
+		console.log('secondaryBalance --> ', balanceFiat);
 		if (primaryCurrency === 'ETH') {
 			mainBalance = balanceValue;
 			secondaryBalance = balanceFiat;
@@ -258,14 +268,19 @@ class Tokens extends PureComponent {
 
 	renderList() {
 		const { tokens, hideZeroBalanceTokens, tokenBalances } = this.props;
+		// const hideZeroBalanceTokens = true;
 		const tokensToDisplay = hideZeroBalanceTokens
 			? tokens.filter(token => {
 					const { address, isETH } = token;
+					console.log('address ->', address);
+					console.log('isETH ->', isETH);
 					return (tokenBalances[address] && !tokenBalances[address]?.isZero?.()) || isETH;
 					// eslint-disable-next-line no-mixed-spaces-and-tabs
 			  })
 			: tokens;
-
+		console.log('hideZeroBalanceTokens ->', hideZeroBalanceTokens);
+		console.log('tokensToDisplay ---> ', tokensToDisplay);
+		console.log('tokens ---> ', tokens);
 		return (
 			<View>
 				{tokensToDisplay.map(item => this.renderItem(item))}

@@ -114,6 +114,26 @@ const styles = StyleSheet.create({
 /**
  * View that contains the list of all the available networks
  */
+
+const RPC_CUSTOM = {
+	rpcUrl: 'https://rpc.bitkubchain.io',
+	chainId: '96',
+	ticker: 'KUB',
+	nickname: 'Bitkub Chain',
+	rpcPrefs: {
+		blockExplorerUrl: 'https://bkcscan.com'
+	}
+};
+
+const RPC_BSC_TESTSNET = {
+	rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
+	chainId: '97',
+	ticker: 'BNB',
+	nickname: 'Smart Chain - Testnet',
+	rpcPrefs: {
+		blockExplorerUrl: 'https://testnet.bscscan.com'
+	}
+};
 export class NetworkList extends PureComponent {
 	static propTypes = {
 		/**
@@ -217,6 +237,7 @@ export class NetworkList extends PureComponent {
 	renderOtherNetworks = () => {
 		const { provider } = this.props;
 		return this.getOtherNetworks().map((network, i) => {
+			console.log('getOtherNetworks ---->> ', i, network);
 			const { color, name } = Networks[network];
 			const selected =
 				provider.type === network ? <Icon name="check" size={20} color={colors.fontSecondary} /> : null;
@@ -224,12 +245,114 @@ export class NetworkList extends PureComponent {
 		});
 	};
 
+	renderRpcNetworksBitkub = () => {
+		const { provider } = this.props;
+		const frequentRpcListConstant = [RPC_CUSTOM];
+
+		return frequentRpcListConstant.map(({ nickname, rpcUrl }, i) => {
+			const { color, name } = { name: nickname || rpcUrl, color: null };
+			const selected =
+				provider.rpcTarget === rpcUrl && provider.type === RPC ? (
+					<Icon name="check" size={20} color={colors.fontSecondary} />
+				) : null;
+			return this.networkElement(selected, this.onSetRpcTargetBitkub, name, color, i, rpcUrl);
+		});
+	};
+
+	onSetRpcTargetBitkub = async rpcTarget => {
+		// const { frequentRpcList } = this.props;
+		const { NetworkController, CurrencyRateController } = Engine.context;
+		// const rpc = frequentRpcList.find(({ rpcUrl }) => rpcUrl === rpcTarget);
+		const rpc = RPC_CUSTOM;
+		const {
+			rpcUrl,
+			chainId,
+			ticker,
+			nickname,
+			rpcPrefs: { blockExplorerUrl }
+		} = rpc;
+
+		console.log('onSetRpcTargetConstant ---->', rpc);
+
+		// If the network does not have chainId then show invalid custom network alert
+		const chainIdNumber = parseInt(chainId, 10);
+		if (!isSafeChainId(chainIdNumber)) {
+			this.props.onClose(false);
+			this.props.showInvalidCustomNetworkAlert(rpcTarget);
+			return;
+		}
+
+		CurrencyRateController.setNativeCurrency(ticker);
+		NetworkController.setRpcTarget(rpcUrl, chainId, ticker, nickname);
+
+		AnalyticsV2.trackEvent(AnalyticsV2.ANALYTICS_EVENTS.NETWORK_SWITCHED, {
+			rpc_url: rpcUrl,
+			chain_id: chainId,
+			source: 'Settings',
+			symbol: ticker,
+			block_explorer_url: blockExplorerUrl,
+			network_name: 'rpc'
+		});
+
+		this.props.onClose(false);
+	};
+
+	renderRpcNetworksBSC = () => {
+		const { provider } = this.props;
+		const frequentRpcListConstant = [RPC_BSC_TESTSNET];
+
+		return frequentRpcListConstant.map(({ nickname, rpcUrl }, i) => {
+			const { color, name } = { name: nickname || rpcUrl, color: null };
+			const selected =
+				provider.rpcTarget === rpcUrl && provider.type === RPC && provider.nickname === name ? (
+					<Icon name="check" size={20} color={colors.fontSecondary} />
+				) : null;
+			return this.networkElement(selected, this.onSetRpcTargetBSC, name, color, i, rpcUrl);
+		});
+	};
+
+	onSetRpcTargetBSC = async rpcTarget => {
+		// const { frequentRpcList } = this.props;
+		const { NetworkController, CurrencyRateController } = Engine.context;
+		// const rpc = frequentRpcList.find(({ rpcUrl }) => rpcUrl === rpcTarget);
+		const rpc = RPC_BSC_TESTSNET;
+		const {
+			rpcUrl,
+			chainId,
+			ticker,
+			nickname,
+			rpcPrefs: { blockExplorerUrl }
+		} = rpc;
+
+		// If the network does not have chainId then show invalid custom network alert
+		const chainIdNumber = parseInt(chainId, 10);
+		if (!isSafeChainId(chainIdNumber)) {
+			this.props.onClose(false);
+			this.props.showInvalidCustomNetworkAlert(rpcTarget);
+			return;
+		}
+
+		CurrencyRateController.setNativeCurrency(ticker);
+		NetworkController.setRpcTarget(rpcUrl, chainId, ticker, nickname);
+
+		AnalyticsV2.trackEvent(AnalyticsV2.ANALYTICS_EVENTS.NETWORK_SWITCHED, {
+			rpc_url: rpcUrl,
+			chain_id: chainId,
+			source: 'Settings',
+			symbol: ticker,
+			block_explorer_url: blockExplorerUrl,
+			network_name: 'rpc'
+		});
+
+		this.props.onClose(false);
+	};
+
 	renderRpcNetworks = () => {
 		const { frequentRpcList, provider } = this.props;
 		return frequentRpcList.map(({ nickname, rpcUrl }, i) => {
 			const { color, name } = { name: nickname || rpcUrl, color: null };
 			const selected =
-				provider.rpcTarget === rpcUrl && provider.type === RPC ? (
+				provider.rpcTarget === rpcUrl && provider.type === RPC && provider.nickname === name ? (
 					<Icon name="check" size={20} color={colors.fontSecondary} />
 				) : null;
 			return this.networkElement(selected, this.onSetRpcTarget, name, color, i, rpcUrl);
@@ -278,6 +401,8 @@ export class NetworkList extends PureComponent {
 				</View>
 				{this.renderOtherNetworks()}
 				{this.renderRpcNetworks()}
+				{this.renderRpcNetworksBitkub()}
+				{this.renderRpcNetworksBSC()}
 			</ScrollView>
 			<View style={styles.footer}>
 				<TouchableOpacity style={styles.footerButton} onPress={this.closeModal}>

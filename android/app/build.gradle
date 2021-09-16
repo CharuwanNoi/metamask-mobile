@@ -191,10 +191,10 @@ android {
 	signingConfigs {
 		def pass = ""
 		release {
-			storeFile file('../keystores/release.keystore')
-			storePassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PASSWORD")
-			keyAlias System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
-			keyPassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
+			storeFile file('keystores/release.keystore')
+			storePassword "@ne@eex@"
+			keyAlias "OneDee"
+			keyPassword "@ne@eex@"
 		}
 		debug {
             storeFile file('debug.keystore')

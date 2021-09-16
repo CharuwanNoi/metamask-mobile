@@ -31,6 +31,14 @@ const styles = StyleSheet.create({
 	}
 });
 
+// {
+//     "token_address": "0xf10362302f2a43e2cdce835db8501860fcaa69b6",
+//     "token_symbol": "IDOL",
+//     "network_name": "rpc",
+//     "chain_id": "97",
+//     "source": "Custom token"
+// }
+
 /**
  * Copmonent that provides ability to add custom tokens.
  */
@@ -72,6 +80,10 @@ export default class AddCustomToken extends PureComponent {
 		if (!(await this.validateCustomToken())) return;
 		const { TokensController } = Engine.context;
 		const { address, symbol, decimals } = this.state;
+		console.log('addToken -------> ', address);
+		console.log('addToken -------> ', symbol);
+		console.log('addToken -------> ', decimals);
+
 		await TokensController.addToken(address, symbol, decimals);
 
 		AnalyticsV2.trackEvent(AnalyticsV2.ANALYTICS_EVENTS.TOKEN_ADDED, this.getAnalyticsParams());

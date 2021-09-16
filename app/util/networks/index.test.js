@@ -1,5 +1,5 @@
 import { isMainNet, getNetworkName, getAllNetworks, getNetworkTypeById } from '.';
-import { MAINNET, ROPSTEN, GOERLI, RPC, KOVAN } from '../../../app/constants/network';
+import { MAINNET, ROPSTEN, GOERLI, RPC, KOVAN, BINANCE } from '../../../app/constants/network';
 
 describe('getAllNetworks', () => {
 	const allNetworks = getAllNetworks();
@@ -7,6 +7,7 @@ describe('getAllNetworks', () => {
 		expect(allNetworks.includes(MAINNET)).toEqual(true);
 		expect(allNetworks.includes(ROPSTEN)).toEqual(true);
 		expect(allNetworks.includes(GOERLI)).toEqual(true);
+		expect(allNetworks.includes(BINANCE)).toEqual(true);
 	});
 	it('should exclude rpc', () => {
 		expect(allNetworks.includes(RPC)).toEqual(false);

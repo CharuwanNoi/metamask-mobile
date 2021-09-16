@@ -177,7 +177,16 @@ class Wallet extends PureComponent {
 
 		let balance = 0;
 		let assets = tokens;
+		console.log('tokens -------->> ', tokens);
+		console.log('accounts -------->> ', accounts);
+		console.log('selectedAddress -------->> ', selectedAddress);
 		if (accounts[selectedAddress]) {
+			console.log('### accounts[selectedAddress]');
+			console.log('### hexToBN', hexToBN(accounts[selectedAddress].balance));
+			console.log('### conversionRate', conversionRate);
+			console.log('### currentCurrency', currentCurrency);
+			console.log('### selectedAddress', accounts[selectedAddress]);
+
 			balance = renderFromWei(accounts[selectedAddress].balance);
 			assets = [
 				{
@@ -190,10 +199,13 @@ class Wallet extends PureComponent {
 				},
 				...(tokens || [])
 			];
+			console.log('### accounts[selectedAddress]', assets);
 		} else {
+			console.log('### assets');
 			assets = tokens;
 		}
 		const account = { address: selectedAddress, ...identities[selectedAddress], ...accounts[selectedAddress] };
+		console.log('assets --- > ', assets);
 		return (
 			<View style={styles.wrapper}>
 				<AccountOverview account={account} navigation={navigation} onRef={this.onRef} />
